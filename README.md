@@ -1,9 +1,6 @@
 # spatial-5mC-project
 
-#######################
-
-General description                    
-#######################
+####################### General description #######################
 
 All details in the spatial 5mC analysis process are outlined in this file, which includes data preprocessing, read alignment, methylation extraction, spatial clustering of methylation, DMR identification, and GO enrichment analysis.
 
