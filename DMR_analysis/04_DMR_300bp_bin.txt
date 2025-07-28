@@ -1,0 +1,55 @@
+library(tidyverse)
+
+#### read in data ####
+mE55 <- read_tsv(file="mm39.300bp_bin.ClusterE5.5_CpG.txt",col_names=F)
+mE65 <- read_tsv(file="mm39.300bp_bin.ClusterE6.5_CpG.txt",col_names = F)
+mE75 <- read_tsv(file="mm39.300bp_bin.ClusterE7.5_CpG.txt",col_names = F)
+
+
+#### calculate ml for each 300bp bins ####
+mE55 <- mE55 %>% group_by(X1,X2,X3) %>% summarise(ncg = n(),mc=sum(X8), umc=sum(X9), ml=mc/(mc+umc))
+mE65 <- mE65 %>% group_by(X1,X2,X3) %>% summarise(ncg = n(),mc=sum(X8), umc=sum(X9), ml=mc/(mc+umc))
+mE75 <- mE75 %>% group_by(X1,X2,X3) %>% summarise(ncg = n(),mc=sum(X8), umc=sum(X9), ml=mc/(mc+umc))
+
+
+#### find DMR for mE55 to mE65 ####
+fisher_p <- function(x){
+  fisher.test(matrix(as.numeric(c(x[5],x[6],x[9],x[10])),byrow = T, nrow = 2))$p.value
+}
+
+mE55to65 <- inner_join(mE55, mE65,by=c("X1","X2","X3"))
+
+mE55to65$fisher_p <- apply(mE55to65, 1, fisher_p)
+
+mE55to65$BH_p <- p.adjust(mE55to65$fisher_p, method = "BH")
+
+
+# ONLY keep bins with at least 3 CpGs covered,  abs(delta_ml) >= 0.2, p.adjust value < 0.1 ####
+mE55to65_dmr <- mE55to65 %>% filter(BH_p < 0.1, ncg.x >= 3, mc.x + umc.x >=5, ncg.y >=3, mc.y+umc.y >=5, abs(ml.x-ml.y)>=0.2 )
+
+mE55to65_dmr <- mE55to65_dmr %>% mutate(delta_ml = ml.y - ml.x)
+mE55to65_dmr_hypo <- filter(mE55to65_dmr, delta_ml < 0)
+mE55to65_dmr_hyper <- filter(mE55to65_dmr, delta_ml > 0)
+write_tsv(mE55to65_dmr_hypo,file="mE55to65_dmr_hypo.txt",col_names = T)
+write_tsv(mE55to65_dmr_hyper,file="mE55to65_dmr_hyper.txt",col_names = T)
+
+
+#### find DMR for mE65 to mE75 ####
+fisher_p <- function(x){
+  fisher.test(matrix(as.numeric(c(x[5],x[6],x[9],x[10])),byrow = T, nrow = 2))$p.value
+}
+
+mE65to75 <- inner_join(mE65, mE75,by=c("X1","X2","X3"))
+
+mE65to75$fisher_p <- apply(mE65to75, 1, fisher_p)
+mE65to75$BH_p <- p.adjust(mE65to75$fisher_p, method = "BH")
+
+
+# ONLY keep bins with at least 3 CpGs covered,  abs(delta_ml) >= 0.2, p.adjust value < 0.1 ####
+mE65to75_dmr <- mE65to75 %>% filter(BH_p < 0.1, ncg.x >= 3, mc.x + umc.x >=5, ncg.y >=3, mc.y+umc.y >=5, abs(ml.x-ml.y)>=0.2 )
+
+mE65to75_dmr <- mE65to75_dmr %>% mutate(delta_ml = ml.y - ml.x)
+mE65to75_dmr_hypo <- filter(mE65to75_dmr, delta_ml < 0)
+mE65to75_dmr_hyper <- filter(mE65to75_dmr, delta_ml > 0)
+write_tsv(mE65to75_dmr_hypo,file="mE65to75_dmr_hypo.txt",col_names = T)
+write_tsv(mE65to75_dmr_hyper,file="mE65to75_dmr_hyper.txt",col_names = T)
