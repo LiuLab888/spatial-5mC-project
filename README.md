@@ -10,7 +10,7 @@ All details in the spatial 5mC analysis process are outlined in this file, which
 Spatial methylation analysis pipeline
 #######################
 
-All codes in Spatial_methyl_pipeline/spatial_template_cmd_scaled.ibp.sh contains steps of data preprocessing, read alignment, and methylation extraction, while the files in /bins and /python_script are invoked scripts for supporting the normal operation of the core script spatial_template_cmd_scaled.ibp.sh. It should be emphasized that the user needs to substitute the sample name, fastq file path, the number of pixels, and the spatial location list with those you use in the corresponding brace, as shown in README.txt.
+All codes in Spatial_methyl_pipeline/spatial_template_cmd_scaled.ibp.sh contains steps of data preprocessing, read alignment, and methylation extraction, while the files in /bins and /python_script are invoked scripts for supporting the normal operation of the core script spatial_template_cmd_scaled.ibp.sh. It should be emphasized that the user needs to substitute the sample name, fastq file path, the number of pixels, and the spatial location list with those you use in the corresponding brace, as shown in https://github.com/LiuLab888/spatial-5mC-project/blob/main/README.txt
 
 Eventually, you should run the following command on a Linux system.
 
