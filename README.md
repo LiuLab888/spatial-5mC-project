@@ -5,6 +5,7 @@
 All details in the spatial 5mC analysis process are outlined in this file, which includes data preprocessing, read alignment, methylation extraction, spatial clustering of methylation, DMR identification, and GO enrichment analysis.
 
 
+
 #######################
 Spatial methylation analysis pipeline
 #######################
@@ -26,6 +27,7 @@ After these steps are completed, you will have all the preliminary results for d
 If you experience any environment configuration error, please contact us at liujiang@ibp.ac.cn
 
 
+
 #######################
 Spatial methylation clustering
 #######################
@@ -43,6 +45,7 @@ Owing to the novel spatial clustering method we designed, it is not well-package
 If you need any detailed discussion for the above clustering method, please send an email to liujiang@ibp.ac.cn
 
 
+
 #######################
 Co-clustering analysis
 #######################
@@ -52,11 +55,13 @@ All codes in /Co_clustering_analysis/Co_clustering_analysis.R show the analysis 
 The user needs to generate the methylation level and CpG coverage number of all genebody regions in advance for all pixels or cells, and then follow the step of data input in the script to generate the two matrices for data quality control and subsequent clustering analysis. To display the feasibility of our code, we provide the two matrices we have generated in /data (Due to the large storage space requirement, the two matrices are headed with 1000 rows).
 
 
+
 #######################
 DMR analysis
 #######################
 
 In DMR analysis, the user needs to merge the bed files for all pixels with the same cluster using DMR_analysis/01_merge_bismark_bed_files.sh, and then transform the format of the merged bed files into the standard input by DMR_analysis/02_pre_DMR_analysis.sh, followed by the use of callDMR function in the package DSS for automatically identifying DMRs or utilizing the fisher.test function in the package stats for custom-sized DMRs in DMR_analysis/03_DMR_analysis.R.
+
 
 
 #######################
