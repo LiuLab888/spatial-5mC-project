@@ -67,7 +67,12 @@ elastix.SetMovingImage(moving_img)  # Set moving image (Methylation)
 
 # Set affine transformation parameters
 param_map = sitk.GetDefaultParameterMap("affine")
-param_map["Size"] = ['192', '192']  # Force Transformix to output the image in the original size
+param_map["Size"] = ['192', '192']
+param_map["MaximumNumberOfIterations"] = ["1000"]
+param_map["NumberOfResolutions"] = ["2"] #Test various values until optimal alignment
+param_map["MaximumStepLength"] = ["2"] #Test various values until optimal alignment
+param_map["AutomaticScalesEstimation"] = ["true"]
+param_map["AutomaticTransformInitialization"] = ["true"]
 elastix.SetParameterMap(param_map)
 elastix.Execute()  # Run elastix to perform the registration
 
